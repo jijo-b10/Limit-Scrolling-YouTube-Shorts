@@ -11,5 +11,6 @@ chrome.runtime.onStartup.addListener(() => {
         chrome.action.setIcon({
             path: res.enabled === false ? "turnOFF.png" : "turnON.png"
         });
+
     });
 });
