@@ -17,8 +17,6 @@
     "128": "icon.png"
   },
   "action": {
-    "default_icon": {
-      "128" : "turnON.png"
-    }
+    "default_popup": "popup.html"
   }
 }
