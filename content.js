@@ -42,17 +42,24 @@ document.body.innerHTML = `
 
 </svg>
 `;
+       console.log("🧠 Last 5 Shorts you watched:");
+        shortTitles.forEach((t, i) => {
+          console.log(`${i}. ${t}`);
+        });
 }
+let shortTitles = [];
+let previousPaths = new Set();
 function track() {
   chrome.storage.local.get(['enabled'], (res) => {
     const enabled = res.enabled !== false; 
     if (!enabled) return;
     if (!isShorts()) return;
-
-    if (location.pathname !== lastPath) {
-        lastPath = location.pathname;
+    if (!previousPaths.has(location.pathname)) {
+        previousPaths.add(location.pathname);
         shortCount++;
-        console.log(`You have watched ${shortCount} short(s) so far.`);
+        const title = document.getElementsByClassName("ytShortsVideoTitleViewModelShortsVideoTitle")[0].innerText;
+        if (title) shortTitles.push(title);
+        console.log(`You have watched ${shortCount} short(s) so far.`,title);
         if (shortCount >= 5) {
             hardBlock();
         }
@@ -60,4 +67,5 @@ function track() {
 });
 }
 
-setInterval(track, 1000);
+setInterval(track, 3000);
+
