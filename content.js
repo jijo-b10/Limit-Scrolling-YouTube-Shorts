@@ -50,21 +50,25 @@ document.body.innerHTML = `
 let shortTitles = [];
 let previousPaths = new Set();
 function track() {
-  chrome.storage.local.get(['enabled'], (res) => {
+  chrome.storage.local.get(['enabled', 'shortCount'], (res) => {
     const enabled = res.enabled !== false; 
+    inputShortCount = (res.shortCount !== undefined) ? res.shortCount : 5;
+    shortCount = 0;
     if (!enabled) return;
     if (!isShorts()) return;
+    
     if (!previousPaths.has(location.pathname)) {
-        previousPaths.add(location.pathname);
+    console.log("🧠 Short detected") ;
+      previousPaths.add(location.pathname);
+        console.log("path: ", location.pathname);
         shortCount++;
         const title = document.getElementsByClassName("ytShortsVideoTitleViewModelShortsVideoTitle")[0].innerText;
         if (title) shortTitles.push(title);
-        console.log(`You have watched ${shortCount} short(s) so far.`,title);
-        if (shortCount >= 5) {
+        console.log(`You have watched ${shortCount} short(s) so far.,"from total ${inputShortCount} shorts`);
+        if (shortCount > inputShortCount) {
             hardBlock();
         }
     }
 });
 }
 
-setInterval(track, 3000);
